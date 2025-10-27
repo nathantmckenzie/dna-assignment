@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useMenu } from "@/hooks/useMenu.ts";
 import MenuItems from "@/components/MenuItems";
 import { categories } from "@/constants/categories";
@@ -7,18 +7,11 @@ export default function Menu() {
   const { items, loading, error } = useMenu();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categories[0]);
 
-  const counts: Record<string, number> = {};
-  items.forEach((item) => {
-    const category = item.category ?? "Other";
-    counts[category] = (counts[category] || 0) + 1;
-  });
+  const menuItems = useMemo(() => {
+    if (!selectedCategory) return items;
 
-  console.log("counts", counts);
-  console.log("");
-
-  const menuItems = selectedCategory
-    ? items.filter((item) => (item.category ?? "Other") === selectedCategory)
-    : items;
+    return items.filter((item) => (item.category ?? "Other") === selectedCategory);
+  }, [items, selectedCategory]);
 
   return (
     <>

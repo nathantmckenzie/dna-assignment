@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { MenuItem } from "@/types/menu";
 import { API_ENDPOINTS } from "@/constants/api";
+import { categories } from "@/constants/categories";
 
 export function useMenu() {
   const [items, setItems] = useState<MenuItem[]>([]);
@@ -19,6 +20,7 @@ export function useMenu() {
 
         for (const [category, itemsArray] of Object.entries(data)) {
           if (!Array.isArray(itemsArray)) continue;
+          if (!categories.includes(category)) continue;
 
           const subset = itemsArray.slice(0, 20).map((item, index) => ({
             id: item.id ?? `${category}-${index}`,
